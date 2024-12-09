@@ -8,9 +8,9 @@ const theme = createTheme({
   },
   primaryColor: 'brand',
   black: darkBrand,
-  fontFamily: 'Poppins, sans-serif',
+  fontFamily: 'Gudea, serif',
   headings: {
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: 'Gudea, serif',
   },
 });
 
