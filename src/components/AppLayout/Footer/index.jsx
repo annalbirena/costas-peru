@@ -1,6 +1,5 @@
 import React from 'react';
 import { Divider, Group, Image, Stack, Text } from '@mantine/core';
-import { IconHeartFilled } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import classes from './footer.module.css';
 
@@ -38,15 +37,9 @@ function Footer() {
             {items}
           </Group>
         </Group>
-        <Divider w="100%" my="md" color="dark.6" />
+        <Divider w="100%" mt="md" color="dark.6" />
         <Stack p="lg" gap={8}>
-          <Group gap="xs" justify="center">
-            <Text ta="center" size="sm" c="white">
-              Made with
-            </Text>
-            <IconHeartFilled color="white" size={16} />
-          </Group>
-          <Text ta="center" size="xs" c="white">
+          <Text ta="center" size="sm" c="white">
             © 2024 Costas del Perú. All rights reserved.
           </Text>
         </Stack>
