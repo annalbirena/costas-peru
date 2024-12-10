@@ -48,3 +48,16 @@
     font-size: var(--mantine-font-size-sm);
   }
 }
+
+.item {
+  display: flex;
+}
+
+.itemIcon {
+  padding: var(--mantine-spacing-xs);
+  margin-right: var(--mantine-spacing-md);
+}
+
+.itemTitle {
+  margin-bottom: calc(var(--mantine-spacing-xs) / 2);
+}

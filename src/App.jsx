@@ -4,7 +4,7 @@ import MapPage from './pages/MapPage';
 import DistrictsPage from './pages/DistrictsPage';
 import DistrictDetailPage from './pages/DistrictDetailPage';
 import BeachesPage from './pages/BeachesPage';
-import BeachDetailPage from './pages/BeacheDetailPage';
+import BeachDetailPage from './pages/BeachDetailPage';
 
 function App() {
   return (
