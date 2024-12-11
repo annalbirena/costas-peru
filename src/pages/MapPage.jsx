@@ -1,11 +1,13 @@
-import { Title } from '@mantine/core';
-import AppLayout from '../components/AppLayout';
+import { Stack } from '@mantine/core';
+import Header from '../components/AppLayout/Header';
+import BeachesMap from '../components/Map';
 
 function MapPage() {
   return (
-    <AppLayout>
-      <Title>Mapa</Title>
-    </AppLayout>
+    <Stack h="100vh" gap={0}>
+      <Header />
+      <BeachesMap />
+    </Stack>
   );
 }
 
