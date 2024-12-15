@@ -6,7 +6,7 @@ import classes from './panel.module.css';
 
 function PanelLayout({ children }) {
   return (
-    <Container size="lg">
+    <Container size="lg" my="xl">
       <Group gap="xl" align="flex-start" className={classes.container}>
         <TableOfContents />
         <Paper

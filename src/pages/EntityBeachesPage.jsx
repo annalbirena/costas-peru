@@ -5,7 +5,7 @@ import PanelLayout from '../components/PanelLayout';
 
 function EntityBeachesPage() {
   return (
-    <AppLayout>
+    <AppLayout bgColor="#f1f3f5">
       <PanelLayout>
         <Stack>
           <Title order={3} fw={500}>

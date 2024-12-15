@@ -6,7 +6,7 @@ import EntityForm from '../components/Forms/EntityForm';
 
 function EntityDataPage() {
   return (
-    <AppLayout>
+    <AppLayout bgColor="#f1f3f5">
       <PanelLayout>
         <Stack>
           <Title order={3} fw={500}>

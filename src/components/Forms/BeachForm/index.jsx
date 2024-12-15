@@ -73,6 +73,10 @@ function BeachForm() {
 
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const handleSubmit = () => {
+    console.log(form.values);
+  };
   return (
     <>
       <Stepper active={active}>
@@ -86,18 +90,19 @@ function BeachForm() {
           <RestrictionsForm form={form} />
         </Stepper.Step>
         <Stepper.Completed>
-          Se completaron los datos correctamente, finalice para publicar la
-          playa
+          Se completaron los datos correctamente, haga click en Publicar Playa
+          para finalizar.
         </Stepper.Completed>
       </Stepper>
 
       <Group justify="flex-end" mt="xl">
         {active !== 0 && (
           <Button variant="default" onClick={prevStep}>
-            Back
+            Atrás
           </Button>
         )}
-        {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
+        {active !== 3 && <Button onClick={nextStep}>Siguiente</Button>}
+        {active === 3 && <Button onClick={handleSubmit}>Publicar Playa</Button>}
       </Group>
     </>
   );

@@ -6,7 +6,7 @@ import BeachForm from '../components/Forms/BeachForm';
 
 function RegisterBeachPage() {
   return (
-    <AppLayout>
+    <AppLayout bgColor="#f1f3f5">
       <PanelLayout>
         <Stack>
           <Title order={3} fw={500}>
