@@ -5,6 +5,10 @@ import DistrictsPage from './pages/DistrictsPage';
 import DistrictDetailPage from './pages/DistrictDetailPage';
 import BeachesPage from './pages/BeachesPage';
 import BeachDetailPage from './pages/BeachDetailPage';
+import LoginPage from './pages/Auth/LoginPage';
+import EntityDataPage from './pages/EntityDataPage';
+import RegisterBeachPage from './pages/RegisterBeachPage';
+import EntityBeachesPage from './pages/EntityBeachesPage';
 
 function App() {
   return (
@@ -16,6 +20,17 @@ function App() {
         <Route path="/playas" element={<BeachesPage />} />
         <Route path="/playas/:id" element={<BeachDetailPage />} />
         <Route path="/mapa" element={<MapPage />} />
+        {/* <Route element={<RequireAuth />}> */}
+        <Route path="/mi-cuenta/datos" element={<EntityDataPage />} />
+        <Route
+          path="/mi-cuenta/publicar-playa"
+          element={<RegisterBeachPage />}
+        />
+        <Route path="/mi-cuenta/playas" element={<EntityBeachesPage />} />
+        {/* </Route> */}
+        {/*  <Route element={<PublicRoute />}> */}
+        <Route path="/login" element={<LoginPage />} />
+        {/*  </Route> */}
       </Routes>
     </BrowserRouter>
   );
