@@ -1,66 +1,59 @@
-import { IconBeachOff, IconSwimming } from '@tabler/icons-react';
-import {
-  Card,
-  Center,
-  Group,
-  Text,
-  Title,
-  useMantineTheme,
-} from '@mantine/core';
+import { Badge, Button, Card, Group, Image, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import classes from './beach.module.css';
 
+const mockdata = {
+  image:
+    'https://portal.andina.pe/EDPfotografia/Thumbnail/2013/02/07/000202844W.jpg',
+  title: 'Playa Blanca',
+  district: 'Punta Hermosa',
+  information: [
+    { emoji: '🌊', label: 'Marea Alta' },
+    { emoji: '🤽', label: 'Tiene Salvavidas' },
+    { emoji: '💧', label: 'Es Saludable' },
+    { emoji: '🚿', label: 'Tiene duchas' },
+    { emoji: '🚽', label: 'Tiene baños' },
+  ],
+};
+
 function BeachCard() {
-  const theme = useMantineTheme();
+  const { image, title, district, information } = mockdata;
+  const features = information.map((badge) => (
+    <Badge
+      key={badge.label}
+      variant="outline"
+      color="cyan"
+      leftSection={badge.emoji}
+    >
+      {badge.label}
+    </Badge>
+  ));
 
   return (
-    <Card
-      p="lg"
-      shadow="lg"
-      className={classes.card}
-      radius="md"
-      component={Link}
-      to="/playas/1"
-    >
-      <div
-        className={classes.image}
-        style={{
-          backgroundImage:
-            'url(https://portal.andina.pe/EDPfotografia/Thumbnail/2013/02/07/000202844W.jpg)',
-        }}
-      />
-      <div className={classes.overlay} />
+    <Card withBorder radius="md" p="md" className={classes.card}>
+      <Card.Section>
+        <Image src={image} alt={title} height={180} />
+      </Card.Section>
 
-      <div className={classes.content}>
-        <div>
-          <Title order={3} size={28} className={classes.title} fw={600}>
-            Playa Blanca
-          </Title>
+      <Card.Section className={classes.section} mt="md">
+        <Group justify="space-between">
+          <Text fz="lg" fw={600}>
+            {title}
+          </Text>
+          <Badge size="sm" variant="light" color="cyan">
+            {district}
+          </Badge>
+        </Group>
+        <Group gap={7} mt="lg">
+          {features}
+        </Group>
+      </Card.Section>
 
-          <Group gap={8}>
-            <Center>
-              <IconBeachOff
-                size={16}
-                stroke={1.5}
-                color={theme.colors.dark[2]}
-              />
-              <Text size="sm" className={classes.bodyText}>
-                No Saludable
-              </Text>
-            </Center>
-            <Center>
-              <IconSwimming
-                size={18}
-                stroke={1.5}
-                color={theme.colors.dark[2]}
-              />
-              <Text size="sm" className={classes.bodyText}>
-                Marea baja
-              </Text>
-            </Center>
-          </Group>
-        </div>
-      </div>
+      <Link to="/playas/1">
+        <Button w="100%" color="cyan" mt="xs">
+          Más información
+        </Button>
+      </Link>
     </Card>
   );
 }

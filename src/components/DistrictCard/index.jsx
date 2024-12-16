@@ -31,8 +31,8 @@ function DistrictCard() {
           </Title>
 
           <Group gap={4}>
-            <IconBeach size={16} stroke={1.5} color={theme.colors.dark[2]} />
-            <Text size="sm" className={classes.bodyText}>
+            <IconBeach size={18} stroke={1.5} color={theme.colors.dark[2]} />
+            <Text size="md" className={classes.bodyText}>
               5 Playas
             </Text>
           </Group>
