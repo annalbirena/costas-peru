@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Stack,
   Button,
@@ -11,9 +11,18 @@ import {
   Text,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
+import { authenticateMuni } from '../../services/municipality';
+import { useMunicipalityContext } from '../../context/MunicipalityContext';
 
 function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setToken, setMunicipalityId } = useMunicipalityContext();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -28,7 +37,51 @@ function LoginPage() {
   });
 
   const handleSubmit = async (values) => {
-    console.log(values);
+    setIsLoading(true);
+
+    try {
+      const responseData = await authenticateMuni(
+        values.email,
+        values.password,
+      );
+
+      const { municipality, token } = responseData;
+
+      if (municipality) {
+        localStorage.setItem('userId', municipality.id);
+        localStorage.setItem('token', token);
+        setMunicipalityId(municipality.id);
+        setToken(token);
+
+        notifications.show({
+          title: 'Éxito!',
+          message: 'Inicio de sesión correcto.',
+          color: 'cyan',
+          icon: <IconCheck size={20} />,
+        });
+
+        form.reset();
+        setIsLoading(false);
+        // Redirigir al perfil de usuario
+        navigate('/mi-cuenta/datos');
+      } else {
+        notifications.show({
+          title: 'Error!',
+          message: 'Usuario o contraseña incorrectos.',
+          color: 'red',
+          icon: <IconX size={20} />,
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error!',
+        message: 'Hubo un error al iniciar sesión',
+        color: 'red',
+        icon: <IconX size={20} />,
+      });
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -60,7 +113,7 @@ function LoginPage() {
           </Stack>
 
           <Group justify="space-between" mt="xl">
-            <Button type="submit" w="100%">
+            <Button type="submit" w="100%" loading={isLoading}>
               Inicia Sesión
             </Button>
           </Group>

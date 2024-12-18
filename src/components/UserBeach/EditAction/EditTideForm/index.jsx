@@ -1,4 +1,4 @@
-import { Modal, Text } from '@mantine/core';
+import { Button, Group, Modal, Select, Stack, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
 
 function EditTideForm({ isOpen, close, onClose }) {
@@ -13,13 +13,28 @@ function EditTideForm({ isOpen, close, onClose }) {
       onClose={handleClose}
       title={
         <Text size="xl" fw="bold">
-          Editar Estado de Marea
+          Actualizar estado de Marea
         </Text>
       }
-      size="md"
+      size="sm"
       centered
     >
-      <h1>Editar Estado de Marea</h1>
+      <Stack>
+        <Select
+          withAsterisk
+          allowDeselect={false}
+          label="Estado de marea"
+          placeholder="Seleccione estado"
+          data={[
+            { value: 'red', label: 'Rojo - Marea Alta' },
+            { value: 'yellow', label: 'Amarillo - Marea Media' },
+            { value: 'green', label: 'Verde - Marea Baja' },
+          ]}
+        />
+        <Group justify="flex-end">
+          <Button>Actualizar</Button>
+        </Group>
+      </Stack>
     </Modal>
   );
 }

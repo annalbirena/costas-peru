@@ -14,8 +14,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
 import { IconLogout } from '@tabler/icons-react';
 import classes from './header.module.css';
-/* import useAuth from '../../../hooks/useAuth';
-import { useUserContext } from '../../../context/UserContext'; */
+import useAuth from '../../../hooks/useAuth';
+import { useMunicipalityContext } from '../../../context/MunicipalityContext';
 
 const links = [
   {
@@ -35,8 +35,8 @@ const links = [
 function Header() {
   const [opened, { toggle }] = useDisclosure(false);
   const isLoggedIn = localStorage.getItem('userId') !== null;
-  /*   const { handleLogout } = useAuth();
-  const { user } = useUserContext(); */
+  const { handleLogout } = useAuth();
+  const { municipality } = useMunicipalityContext();
 
   const items = links.map((link) => (
     <Link key={link.label} to={link.link} className={classes.link}>
@@ -95,33 +95,29 @@ function Header() {
             <Menu shadow="md" width={200}>
               <Menu.Target>
                 <UnstyledButton>
-                  {/* <Avatar variant="filled" color="purpleBrand.3" radius="xl">
-                    {user?.name[0]}
-                  </Avatar> */}
-                  <Avatar variant="filled" color="purpleBrand.3" radius="xl" />
+                  <Avatar variant="filled" radius="xl">
+                    {municipality?.name[0]}
+                  </Avatar>
                 </UnstyledButton>
               </Menu.Target>
 
               <Menu.Dropdown>
                 <Menu.Item>
-                  <Link
-                    to="/mi-cuenta/datos-personales"
-                    className={classes.userMenuLink}
-                  >
+                  <Link to="/mi-cuenta/datos" className={classes.userMenuLink}>
                     Mi cuenta
                   </Link>
                 </Menu.Item>
                 <Menu.Item>
                   <Link
-                    to="/mi-cuenta/publicar-mascota"
+                    to="/mi-cuenta/publicar-playa"
                     className={classes.userMenuLink}
                   >
-                    Registrar mascota
+                    Registrar playa
                   </Link>
                 </Menu.Item>
                 <Menu.Item
                   color="red"
-                  /* onClick={handleLogout} */
+                  onClick={handleLogout}
                   leftSection={
                     <IconLogout size={16} stroke={1.5} color="red" />
                   }

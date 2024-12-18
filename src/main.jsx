@@ -6,12 +6,15 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import App from './App';
 import theme from './theme';
+import { MunicipalityProvider } from './context/MunicipalityContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <MantineProvider theme={theme}>
-      <Notifications />
-      <App />
-    </MantineProvider>
+    <MunicipalityProvider>
+      <MantineProvider theme={theme}>
+        <Notifications />
+        <App />
+      </MantineProvider>
+    </MunicipalityProvider>
   </StrictMode>,
 );

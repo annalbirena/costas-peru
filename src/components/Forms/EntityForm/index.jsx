@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import {
   Button,
@@ -9,19 +10,26 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core';
+import { useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { IconPhotoScan } from '@tabler/icons-react';
 /* import { useUserContext } from '../../../context/UserContext';
 import { getUserById, updateUser } from '../../../services/user'; */
 import classes from '../form.module.css';
+import { useMunicipalityContext } from '../../../context/MunicipalityContext';
+import departmentData from '../../../data/department';
+import provincesData from '../../../data/provinces';
 
 function EntityForm() {
+  const { municipality } = useMunicipalityContext();
+  /* const [enableSubmit, setEnableSubmit] = useState(true); */
+  /* const [loading, setLoading] = useState(false); */
+
   const form = useForm({
     initialValues: {
       name: '',
       department: '',
       province: '',
-      district: '',
       headline: '',
       description: '',
       email: '',
@@ -39,6 +47,23 @@ function EntityForm() {
   const handleSubmit = async (values) => {
     console.log(values);
   };
+
+  // Inicializar los valores del formulario con los datos del usuario
+  useEffect(() => {
+    if (municipality) {
+      const data = {
+        name: municipality.name,
+        department: municipality.department,
+        province: municipality.province,
+        headline: municipality.phrase,
+        description: municipality.description,
+        email: municipality.email,
+        image: null,
+      };
+      form.setInitialValues(data);
+      form.setValues(data);
+    }
+  }, [municipality]);
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -64,7 +89,7 @@ function EntityForm() {
             allowDeselect={false}
             label="Departamento"
             placeholder="Seleccione Departamento"
-            data={['React', 'Angular', 'Vue', 'Svelte']}
+            data={departmentData}
             key={form.key('department')}
             {...form.getInputProps('department')}
             className={classes.input}
@@ -74,19 +99,9 @@ function EntityForm() {
             allowDeselect={false}
             label="Provincia"
             placeholder="Seleccione Provincia"
-            data={['React', 'Angular', 'Vue', 'Svelte']}
+            data={provincesData}
             key={form.key('province')}
             {...form.getInputProps('province')}
-            className={classes.input}
-          />
-          <Select
-            withAsterisk
-            allowDeselect={false}
-            label="Distrito"
-            placeholder="Seleccione Distrito"
-            data={['React', 'Angular', 'Vue', 'Svelte']}
-            key={form.key('district')}
-            {...form.getInputProps('district')}
             className={classes.input}
           />
         </Group>
