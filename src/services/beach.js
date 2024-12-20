@@ -31,3 +31,20 @@ export const getBeachesByMuni = async (id) => {
     return null;
   }
 };
+
+// Función para actualizar el estado de la marea
+export const updateTideStatus = async (beachId, tideStatus, token) => {
+  const URL = `${BASE_URL}/beaches/${beachId}/tideStatus`;
+  try {
+    const response = await axios.patch(URL, tideStatus, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pet:', error);
+    return null;
+  }
+};
