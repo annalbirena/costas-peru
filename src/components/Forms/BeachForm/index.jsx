@@ -1,13 +1,16 @@
+/* eslint-disable no-console */
 import { Button, Group, Stepper } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import BasicForm from './BasicForm';
 import ServicesForm from './ServicesForm';
 import RestrictionsForm from './RestrictionsForm';
 import { createBeach } from '../../../services/beach';
 import { useMunicipalityContext } from '../../../context/MunicipalityContext';
+import { getNonEmptyRestrictions } from './utils';
 
 function BeachForm() {
   const [active, setActive] = useState(0);
@@ -80,10 +83,6 @@ function BeachForm() {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  /*   const handleSubmit = async () => {
-    console.log(form.values);
-  }; */
-
   const handleSubmit = async () => {
     setLoading(true);
     const values = form.getValues();
@@ -104,7 +103,7 @@ function BeachForm() {
           restroomSchedule: values.bathroomSchedule,
           hasShowers: values.hasShowers === 'si',
           showerSchedule: values.showerSchedule,
-          restrictions: values.restrictions,
+          restrictions: getNonEmptyRestrictions(values.restrictions),
           file: values.image,
         },
         token,
@@ -117,6 +116,7 @@ function BeachForm() {
           color: 'cyan',
           icon: <IconCheck size={20} />,
         });
+        Navigate('/mi-cuenta/playas');
       } else {
         notifications.show({
           title: 'Error!',

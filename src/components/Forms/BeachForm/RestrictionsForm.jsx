@@ -1,13 +1,13 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import { Button, Group, Stack, TextInput } from '@mantine/core';
-import { randomId } from '@mantine/hooks';
+import { ActionIcon, Button, Group, Stack, TextInput } from '@mantine/core';
+import { IconX } from '@tabler/icons-react';
 import PropTypes from 'prop-types';
 
 function RestrictionsForm({ form }) {
   const fields = form.getValues().restrictions.map((item, index) => {
-    const id = randomId();
     return (
-      <Group key={id}>
+      <Group key={index}>
         <TextInput
           placeholder="Acampar"
           key={form.key(`restrictions.${index}.name`)}
@@ -19,6 +19,12 @@ function RestrictionsForm({ form }) {
           key={form.key(`restrictions.${index}.description`)}
           {...form.getInputProps(`restrictions.${index}.description`)}
         />
+        <ActionIcon
+          size="lg"
+          onClick={() => form.removeListItem('restrictions', index)}
+        >
+          <IconX size={20} stroke={1.5} />
+        </ActionIcon>
       </Group>
     );
   });
@@ -48,6 +54,7 @@ RestrictionsForm.propTypes = {
     setFieldValue: PropTypes.func.isRequired,
     key: PropTypes.func.isRequired,
     insertListItem: PropTypes.func.isRequired,
+    removeListItem: PropTypes.func.isRequired,
     getValues: PropTypes.func.isRequired,
   }).isRequired,
 };

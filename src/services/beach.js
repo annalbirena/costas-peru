@@ -19,3 +19,15 @@ export const createBeach = async (muniId, data, token) => {
     return null;
   }
 };
+
+// Función para obtener playas por municipalidad
+export const getBeachesByMuni = async (id) => {
+  const URL = `${BASE_URL}/beaches/municipality/${id}`;
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pet:', error);
+    return null;
+  }
+};
