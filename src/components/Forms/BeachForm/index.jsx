@@ -1,19 +1,24 @@
 import { Button, Group, Stepper } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
 import BasicForm from './BasicForm';
 import ServicesForm from './ServicesForm';
 import RestrictionsForm from './RestrictionsForm';
+import { createBeach } from '../../../services/beach';
+import { useMunicipalityContext } from '../../../context/MunicipalityContext';
 
 function BeachForm() {
   const [active, setActive] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const { municipality, token } = useMunicipalityContext();
 
   const form = useForm({
     initialValues: {
       name: '',
       description: '',
       location: null,
-      image: null,
       isHealthy: null,
       tideStatus: '', // Estado de marea
       hasLifeguards: null,
@@ -23,6 +28,7 @@ function BeachForm() {
       hasShowers: null,
       showerSchedule: '',
       restrictions: [],
+      image: null,
     },
 
     validate: (values) => {
@@ -74,9 +80,62 @@ function BeachForm() {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  const handleSubmit = () => {
+  /*   const handleSubmit = async () => {
     console.log(form.values);
+  }; */
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const values = form.getValues();
+
+    try {
+      const muniCreated = await createBeach(
+        municipality.id,
+        {
+          name: values.name,
+          description: values.description,
+          latitude: values.location.latitude,
+          longitude: values.location.longitude,
+          isHealthy: values.isHealthy === 'si',
+          tideStatus: values.tideStatus,
+          hasLifeguards: values.hasLifeguards === 'si',
+          lifeguardSchedule: values.lifeguardSchedule,
+          hasRestrooms: values.hasBathrooms === 'si',
+          restroomSchedule: values.bathroomSchedule,
+          hasShowers: values.hasShowers === 'si',
+          showerSchedule: values.showerSchedule,
+          restrictions: values.restrictions,
+          file: values.image,
+        },
+        token,
+      );
+
+      if (muniCreated) {
+        notifications.show({
+          title: 'Éxito!',
+          message: 'Playa creada correctamente.',
+          color: 'cyan',
+          icon: <IconCheck size={20} />,
+        });
+      } else {
+        notifications.show({
+          title: 'Error!',
+          message: 'Hubo un error al crear la playa, intenta nuevamente.',
+          icon: <IconX size={20} />,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      notifications.show({
+        title: 'Error!',
+        message: 'Hubo un error al crear la playa, intenta nuevamente.',
+        icon: <IconX size={20} />,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <>
       <Stepper active={active}>
@@ -102,7 +161,11 @@ function BeachForm() {
           </Button>
         )}
         {active !== 3 && <Button onClick={nextStep}>Siguiente</Button>}
-        {active === 3 && <Button onClick={handleSubmit}>Publicar Playa</Button>}
+        {active === 3 && (
+          <Button onClick={handleSubmit} loading={loading}>
+            Publicar Playa
+          </Button>
+        )}
       </Group>
     </>
   );

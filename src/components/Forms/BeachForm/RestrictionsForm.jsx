@@ -4,21 +4,24 @@ import { randomId } from '@mantine/hooks';
 import PropTypes from 'prop-types';
 
 function RestrictionsForm({ form }) {
-  const fields = form.getValues().restrictions.map((item, index) => (
-    <Group key={item.key}>
-      <TextInput
-        placeholder="Acampar"
-        key={form.key(`restrictions.${index}.name`)}
-        {...form.getInputProps(`restrictions.${index}.name`)}
-      />
-      <TextInput
-        flex={1}
-        placeholder="Prohibido acampar"
-        key={form.key(`restrictions.${index}.description`)}
-        {...form.getInputProps(`restrictions.${index}.description`)}
-      />
-    </Group>
-  ));
+  const fields = form.getValues().restrictions.map((item, index) => {
+    const id = randomId();
+    return (
+      <Group key={id}>
+        <TextInput
+          placeholder="Acampar"
+          key={form.key(`restrictions.${index}.name`)}
+          {...form.getInputProps(`restrictions.${index}.name`)}
+        />
+        <TextInput
+          flex={1}
+          placeholder="Prohibido acampar"
+          key={form.key(`restrictions.${index}.description`)}
+          {...form.getInputProps(`restrictions.${index}.description`)}
+        />
+      </Group>
+    );
+  });
   return (
     <Stack>
       {fields}
@@ -29,7 +32,6 @@ function RestrictionsForm({ form }) {
             form.insertListItem('restrictions', {
               name: '',
               description: '',
-              key: randomId(),
             })
           }
         >

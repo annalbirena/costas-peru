@@ -1,36 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import {
+  BackgroundImage,
   Button,
-  FileInput,
+  Center,
+  FileButton,
   Group,
-  rem,
   Select,
   Stack,
   Textarea,
   TextInput,
 } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
-import { IconPhotoScan } from '@tabler/icons-react';
-/* import { useUserContext } from '../../../context/UserContext';
-import { getUserById, updateUser } from '../../../services/user'; */
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import classes from '../form.module.css';
 import { useMunicipalityContext } from '../../../context/MunicipalityContext';
 import departmentData from '../../../data/department';
 import provincesData from '../../../data/provinces';
+import { getMuniById, updateMuni } from '../../../services/municipality';
 
 function EntityForm() {
-  const { municipality } = useMunicipalityContext();
-  /* const [enableSubmit, setEnableSubmit] = useState(true); */
-  /* const [loading, setLoading] = useState(false); */
+  const { municipality, setMunicipality, token } = useMunicipalityContext();
+  const [imageSrc, setImageSrc] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
       name: '',
       department: '',
       province: '',
-      headline: '',
+      phrase: '',
       description: '',
       email: '',
       image: null,
@@ -44,10 +46,6 @@ function EntityForm() {
     },
   });
 
-  const handleSubmit = async (values) => {
-    console.log(values);
-  };
-
   // Inicializar los valores del formulario con los datos del usuario
   useEffect(() => {
     if (municipality) {
@@ -55,15 +53,73 @@ function EntityForm() {
         name: municipality.name,
         department: municipality.department,
         province: municipality.province,
-        headline: municipality.phrase,
-        description: municipality.description,
+        phrase: municipality.phrase ? municipality.phrase : '',
+        description: municipality.description ? municipality.description : '',
         email: municipality.email,
-        image: null,
+        image: municipality.image,
       };
       form.setInitialValues(data);
       form.setValues(data);
     }
   }, [municipality]);
+
+  const handleImageUpload = (file) => {
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+    }
+  };
+
+  const handleSubmit = async (values) => {
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append('name', values.name);
+    formData.append('department', values.department);
+    formData.append('province', values.province);
+    formData.append('phrase', values.phrase);
+    formData.append('description', values.description);
+
+    if (imageFile) {
+      formData.append('file', imageFile);
+    }
+
+    try {
+      const muniUpdated = await updateMuni(municipality.id, formData, token);
+
+      if (muniUpdated) {
+        setLoading(false);
+        notifications.show({
+          title: 'Éxito!',
+          message: 'Datos actualizados correctamente.',
+          color: 'cyan',
+          icon: <IconCheck size={20} />,
+        });
+
+        // Obtener datos actualizados de la municipalidad
+        const getMuni = async (id) => {
+          const muniData = await getMuniById(id);
+          setMunicipality(muniData);
+        };
+
+        getMuni(municipality.id);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      notifications.show({
+        title: 'Error!',
+        message: 'Hubo un erro al actualizar los datos, intenta nuevamente.',
+        icon: <IconX size={20} />,
+      });
+    }
+  };
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -85,6 +141,7 @@ function EntityForm() {
         />
         <Group grow wrap="nowrap" className={classes.row}>
           <Select
+            searchable
             withAsterisk
             allowDeselect={false}
             label="Departamento"
@@ -95,6 +152,7 @@ function EntityForm() {
             className={classes.input}
           />
           <Select
+            searchable
             withAsterisk
             allowDeselect={false}
             label="Provincia"
@@ -109,7 +167,8 @@ function EntityForm() {
         <TextInput
           label="Lema o frase representativa del balneario"
           placeholder="Ingresa frase"
-          {...form.getInputProps('headline')}
+          key={form.key('phrase')}
+          {...form.getInputProps('phrase')}
         />
         <Textarea
           withAsterisk
@@ -120,27 +179,26 @@ function EntityForm() {
           key={form.key('description')}
           {...form.getInputProps('description')}
         />
-        <FileInput
-          withAsterisk
-          label="Cargar imagen"
-          placeholder="Seleccione imagen desde su equipo"
-          leftSectionPointerEvents="none"
-          leftSection={
-            <IconPhotoScan
-              style={{
-                width: rem(18),
-                height: rem(18),
-              }}
-              stroke={1.5}
-            />
-          }
-          key={form.key('image')}
-          {...form.getInputProps('image')}
-        />
+        <BackgroundImage
+          h={300}
+          src={imageSrc || form.getValues().image}
+          radius="sm"
+        >
+          <Center p="md" h="100%" className={classes.image}>
+            <FileButton
+              accept="image/png, image/gif, image/jpeg, image/svg+xml, image/webp, image/avif, image/heic, image/heif"
+              onChange={handleImageUpload}
+            >
+              {(props) => <Button {...props}>Actualizar foto</Button>}
+            </FileButton>
+          </Center>
+        </BackgroundImage>
       </Stack>
 
       <Group mt="xl" justify="flex-end">
-        <Button type="submit">Guardar Datos</Button>
+        <Button type="submit" loading={loading}>
+          Guardar Datos
+        </Button>
       </Group>
     </form>
   );

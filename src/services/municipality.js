@@ -14,7 +14,7 @@ export const authenticateMuni = async (email, password) => {
     const response = await axios.post(`${BASE_URL}/municipalities/login`, data);
     return response.data;
   } catch (error) {
-    console.error('Error authenticating user:', error);
+    console.error('Error authenticating municipality:', error);
     return null;
   }
 };
@@ -25,7 +25,26 @@ export const getMuniById = async (id) => {
     const response = await axios.get(`${BASE_URL}/municipalities/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching user:', error);
+    console.error('Error fetching municipality:', error);
+    return null;
+  }
+};
+
+// Actualizar datos de municipalidad
+export const updateMuni = async (muniId, data, token) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/municipalities/${muniId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating municipality:', error);
     return null;
   }
 };

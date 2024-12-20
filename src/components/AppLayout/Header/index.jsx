@@ -95,7 +95,7 @@ function Header() {
             <Menu shadow="md" width={200}>
               <Menu.Target>
                 <UnstyledButton>
-                  <Avatar variant="filled" radius="xl">
+                  <Avatar variant="filled" radius="xl" color="brand">
                     {municipality?.name[0]}
                   </Avatar>
                 </UnstyledButton>
