@@ -1,0 +1,142 @@
+import React from 'react';
+import {
+  Avatar,
+  Burger,
+  Button,
+  Drawer,
+  Group,
+  Image,
+  Menu,
+  Stack,
+  UnstyledButton,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Link } from 'react-router-dom';
+import { IconLogout } from '@tabler/icons-react';
+import classes from './header.module.css';
+import useAuth from '../../../hooks/useAuth';
+import { useMunicipalityContext } from '../../../context/MunicipalityContext';
+
+const links = [
+  {
+    link: '/balnearios',
+    label: 'Balnearios',
+  },
+  {
+    link: '/playas',
+    label: 'Playas',
+  },
+  {
+    link: '/mapa',
+    label: 'Mapa',
+  },
+];
+
+function Header() {
+  const [opened, { toggle }] = useDisclosure(false);
+  const isLoggedIn = localStorage.getItem('userId') !== null;
+  const { handleLogout } = useAuth();
+  const { municipality } = useMunicipalityContext();
+
+  const items = links.map((link) => (
+    <Link key={link.label} to={link.link} className={classes.link}>
+      {link.label}
+    </Link>
+  ));
+
+  return (
+    <header>
+      <Drawer
+        opened={opened}
+        onClose={toggle}
+        position="top"
+        padding="md"
+        title={
+          <Link to="/">
+            <Image height={60} src="/costas-logo.svg" />
+          </Link>
+        }
+      >
+        <Stack pt="md">
+          <Stack>{items}</Stack>
+          <Link to="/mi-cuenta/publicar-mascota">
+            <Button variant="filled" size="lg">
+              Explora las playas
+            </Button>
+          </Link>
+        </Stack>
+      </Drawer>
+      <div className={classes.header}>
+        <Group>
+          <Burger
+            color="dark"
+            opened={opened}
+            onClick={toggle}
+            size="sm"
+            hiddenFrom="sm"
+          />
+          <Link to="/">
+            <Image visibleFrom="sm" height={60} src="/costas-logo.svg" />
+            <Image hiddenFrom="sm" height={48} src="/isotipo.svg" />
+          </Link>
+        </Group>
+
+        <Group
+          gap={5}
+          justify="center"
+          className={classes.links}
+          visibleFrom="sm"
+        >
+          {items}
+        </Group>
+
+        <Group>
+          {isLoggedIn ? (
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <UnstyledButton>
+                  <Avatar variant="filled" radius="xl" color="brand">
+                    {municipality?.name[0]}
+                  </Avatar>
+                </UnstyledButton>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Item>
+                  <Link to="/mi-cuenta/datos" className={classes.userMenuLink}>
+                    Mi cuenta
+                  </Link>
+                </Menu.Item>
+                <Menu.Item>
+                  <Link
+                    to="/mi-cuenta/publicar-playa"
+                    className={classes.userMenuLink}
+                  >
+                    Registrar playa
+                  </Link>
+                </Menu.Item>
+                <Menu.Item
+                  color="red"
+                  onClick={handleLogout}
+                  leftSection={
+                    <IconLogout size={16} stroke={1.5} color="red" />
+                  }
+                >
+                  Cerrar sesión
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          ) : (
+            <Link to="/login">
+              <Button variant="outline" h={36} px={16} fz="sm">
+                Inicia Sesión
+              </Button>
+            </Link>
+          )}
+        </Group>
+      </div>
+    </header>
+  );
+}
+
+export default Header;
