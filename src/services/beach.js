@@ -44,7 +44,19 @@ export const getBeachesByMuni = async (id) => {
     const response = await axios.get(URL);
     return response.data;
   } catch (error) {
-    console.error('Error fetching pet:', error);
+    console.error('Error fetching beaches:', error);
+    return null;
+  }
+};
+
+// Función para obtener playa por Id
+export const getBeachById = async (id) => {
+  const URL = `${BASE_URL}/beaches/${id}`;
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching beach:', error);
     return null;
   }
 };
@@ -61,7 +73,7 @@ export const updateTideStatus = async (beachId, tideStatus, token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching pet:', error);
+    console.error('Error fetching tide status:', error);
     return null;
   }
 };

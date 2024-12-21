@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import * as React from 'react';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Box } from '@mantine/core';
 import { Map, Marker } from 'react-map-gl';
 import PropTypes from 'prop-types';
@@ -21,6 +21,16 @@ const viewPort = {
 
 function BeachMap({ location }) {
   const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (location.longitude) {
+      mapRef.current?.getMap().flyTo({
+        center: [location.longitude, location.latitude],
+        duration: 2000,
+        zoom: 16,
+      });
+    }
+  }, [location]);
 
   return (
     <Box h={400} mt="xl">

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumbs,
@@ -9,61 +10,65 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { useParams } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
 import classes from './detail.module.css';
 import BeachCard from '../../components/BeachCard';
+import { getMuniById } from '../../services/municipality';
 
 function DistrictDetailPage() {
+  const { id } = useParams();
+  const [muniData, setMuniData] = useState(null);
+
+  const getMuniData = async () => {
+    const data = await getMuniById(id);
+    setMuniData(data);
+  };
+
+  useEffect(() => {
+    if (id) {
+      getMuniData();
+    }
+  }, [id]);
+
   return (
     <AppLayout>
       <Box>
-        <div className={classes.hero}>
+        <div
+          className={classes.hero}
+          style={{
+            backgroundImage: `url(${muniData?.image})`,
+          }}
+        >
           <Overlay
             gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
             opacity={1}
             zIndex={0}
           />
           <Container className={classes.container} size="md">
-            <Title className={classes.title}>Punta Hermosa</Title>
+            <Title className={classes.title}>{muniData?.name}</Title>
             <Text className={classes.description} mt="xl" ta="center">
-              El balneario de los surfistas.
+              {muniData?.phrase}
             </Text>
           </Container>
         </div>
         <Container size="md" pt={48} pb={100}>
           <Breadcrumbs separator="→" separatorMargin="md" mb="xl">
-            <Text c="brand">Departamento</Text>
-            <Text c="brand">Provincia</Text>
-            <Text c="brand">Distrito</Text>
+            <Text c="brand">{muniData?.department}</Text>
+            <Text c="brand">{muniData?.province}</Text>
           </Breadcrumbs>
-          <Text>
-            Barcelona es un escaparate a las últimas novedades en moda. Pasear
-            por sus calles es descubrir un mundo de posibilidades para una
-            jornada de shopping. Desde zonas llenas de glamour y grandes firmas
-            con tiendas icónicas en edificios emblemáticos, como por el paseo de
-            Gracia o la avenida Diagonal, hasta diseños alternativos e
-            innovadores en zonas como el barrio del Born. Además, en Barcelona
-            abundan los comercios tradicionales y tendrás la oportunidad de
-            visitar tiendas centenarias y ateliers que sorprenden por su
-            atención al detalle. Barcelona es un escaparate a las últimas
-            novedades en moda. Pasear por sus calles es descubrir un mundo de
-            posibilidades para una jornada de shopping. Desde zonas llenas de
-            glamour y grandes firmas con tiendas icónicas en edificios
-            emblemáticos, como por el paseo de Gracia o la avenida Diagonal,
-            hasta diseños alternativos e innovadores en zonas como el barrio del
-            Born. Además, en Barcelona abundan los comercios tradicionales y
-            tendrás la oportunidad de visitar tiendas centenarias y ateliers que
-            sorprenden por su atención al detalle.
-          </Text>
+          <Text>{muniData?.description}</Text>
           <Title order={2} mt="xl">
             Playas
           </Title>
-          <Group justify="center" mt="xl">
-            <BeachCard />
-            <BeachCard />
-            <BeachCard />
-            <BeachCard />
-            <BeachCard />
+          <Group mt="xl">
+            {muniData?.beaches?.length > 0 ? (
+              muniData?.beaches.map((beach) => {
+                return <BeachCard key={beach.id} data={beach} />;
+              })
+            ) : (
+              <h1>No hay playas</h1>
+            )}
           </Group>
         </Container>
       </Box>

@@ -1,55 +1,54 @@
-import { Badge, Button, Card, Group, Image, Text } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  Image,
+  Text,
+  ThemeIcon,
+} from '@mantine/core';
+import { IconFlagFilled } from '@tabler/icons-react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classes from './beach.module.css';
 
-const mockdata = {
-  image:
-    'https://portal.andina.pe/EDPfotografia/Thumbnail/2013/02/07/000202844W.jpg',
-  title: 'Playa Blanca',
-  district: 'Punta Hermosa',
-  information: [
-    { emoji: '🌊', label: 'Marea Alta' },
-    { emoji: '🤽', label: 'Tiene Salvavidas' },
-    { emoji: '💧', label: 'Es Saludable' },
-    { emoji: '🚿', label: 'Tiene duchas' },
-    { emoji: '🚽', label: 'Tiene baños' },
-  ],
-};
-
-function BeachCard() {
-  const { image, title, district, information } = mockdata;
-  const features = information.map((badge) => (
-    <Badge
-      key={badge.label}
-      variant="outline"
-      color="cyan"
-      leftSection={badge.emoji}
-    >
-      {badge.label}
-    </Badge>
-  ));
-
+function BeachCard({ data }) {
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
-        <Image src={image} alt={title} height={180} />
+        <Image src={data.image} alt={data.name} height={180} />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
-        <Group justify="space-between">
+        <Group gap="xs">
           <Text fz="lg" fw={600}>
-            {title}
+            {data.name}
           </Text>
-          <Badge size="sm" variant="light" color="cyan">
-            {district}
-          </Badge>
+          <ThemeIcon variant="white">
+            <IconFlagFilled
+              color={data.tideStatus}
+              style={{ width: '70%', height: '70%' }}
+            />
+          </ThemeIcon>
         </Group>
+
         <Group gap={7} mt="lg">
-          {features}
+          <Badge variant="outline" color="cyan" leftSection="💧">
+            {data.isHealthy ? 'Es Saludable' : 'No es saludable'}
+          </Badge>
+          <Badge variant="outline" color="cyan" leftSection="🤽">
+            {data.hasLifeguards ? 'Tiene Salvavidas' : 'No tiene Salvavidas'}
+          </Badge>
+          <Badge variant="outline" color="cyan" leftSection="🚽">
+            {data.hasRestrooms ? 'Tiene baños' : 'No tiene baños'}
+          </Badge>
+          <Badge variant="outline" color="cyan" leftSection="🚿">
+            {data.hasShowers ? 'Tiene duchas' : 'No tiene duchas'}
+          </Badge>
         </Group>
       </Card.Section>
 
-      <Link to="/playas/1">
+      <Link to={`/playas/${data.id}`}>
         <Button w="100%" color="cyan" mt="xs">
           Más información
         </Button>
@@ -57,5 +56,33 @@ function BeachCard() {
     </Card>
   );
 }
+
+BeachCard.propTypes = {
+  data: PropTypes.shape({
+    description: PropTypes.string.isRequired,
+    hasLifeguards: PropTypes.bool.isRequired,
+    hasRestrooms: PropTypes.bool.isRequired,
+    hasShowers: PropTypes.bool.isRequired,
+    id: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    isHealthy: PropTypes.bool.isRequired,
+    latitude: PropTypes.number.isRequired,
+    lifeguardSchedule: PropTypes.string.isRequired,
+    longitude: PropTypes.number.isRequired,
+    municipalityId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    restrictions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+      }),
+    ),
+    restroomSchedule: PropTypes.string.isRequired,
+    showerSchedule: PropTypes.string.isRequired,
+    tideStatus: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default BeachCard;
