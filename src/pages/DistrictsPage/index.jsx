@@ -69,9 +69,7 @@ function DistrictsPage() {
             <Title className={classes.title}>
               Conoce los balnearios del Perú
             </Title>
-            {/* <Text className={classes.description} size="xl" mt="xl">
-            Filtra los balnearios por departamento, provincia o distrito.
-            </Text> */}
+
             <Group mt="xl" align="flex-end">
               <Stack gap={4}>
                 <Text c="white">Departamento</Text>
@@ -99,14 +97,6 @@ function DistrictsPage() {
           </Container>
         </div>
         <Container size="lg" pt={48} pb={100}>
-          {/* <Group justify="center">
-            <DistrictCard />
-            <DistrictCard />
-            <DistrictCard />
-            <DistrictCard />
-            <DistrictCard />
-            <DistrictCard />
-          </Group> */}
           <Stack flex={1}>
             {loading ? (
               <Center h={100} w="100%">

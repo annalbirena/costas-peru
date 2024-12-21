@@ -49,6 +49,18 @@ export const getBeachesByMuni = async (id) => {
   }
 };
 
+// Función para obtener playas
+export const getBeaches = async () => {
+  const URL = `${BASE_URL}/beaches`;
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching beaches:', error);
+    return null;
+  }
+};
+
 // Función para obtener playa por Id
 export const getBeachById = async (id) => {
   const URL = `${BASE_URL}/beaches/${id}`;
