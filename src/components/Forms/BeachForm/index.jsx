@@ -4,7 +4,6 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import BasicForm from './BasicForm';
 import ServicesForm from './ServicesForm';
 import RestrictionsForm from './RestrictionsForm';
@@ -116,7 +115,6 @@ function BeachForm() {
           color: 'cyan',
           icon: <IconCheck size={20} />,
         });
-        Navigate('/mi-cuenta/playas');
       } else {
         notifications.show({
           title: 'Error!',
