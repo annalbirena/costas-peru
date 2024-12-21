@@ -1,23 +1,16 @@
-/* eslint-disable indent */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable operator-linebreak */
-/* eslint-disable no-confusing-arrow */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable object-curly-newline */
-/* eslint-disable react/require-default-props */
 import * as React from 'react';
 import { Box } from '@mantine/core';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import MapLibreGl from 'maplibre-gl';
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import {
   FullscreenControl,
   GeolocateControl,
   Map,
   NavigationControl,
 } from 'react-map-gl';
-import ControlPanel from './ControlPanel';
-/* import MyMarker from './MyMarker'; */
+import { getBeaches } from '../../services/beach';
+import MyMarker from './MyMarker';
 
 const containerStyle = {
   width: '100%',
@@ -33,6 +26,27 @@ const viewPort = {
 
 function BeachesMap() {
   const mapRef = useRef(null);
+  const [beaches, setBeaches] = useState([]);
+
+  useEffect(() => {
+    const fetchBeaches = async () => {
+      try {
+        const beachesData = await getBeaches();
+        setBeaches(beachesData);
+      } catch (error) {
+        console.error('Error fetching beaches data', error);
+      }
+    };
+    fetchBeaches();
+  }, []);
+
+  const beachesPin = useMemo(
+    () =>
+      beaches
+        ? beaches.map((beach) => <MyMarker key={beach.id} data={beach} />)
+        : [],
+    [beaches],
+  );
 
   return (
     <Box flex={1}>
@@ -48,12 +62,8 @@ function BeachesMap() {
         <FullscreenControl position="top-left" />
         <NavigationControl position="top-left" />
 
-        {/* Marcadores de mascotas perdidas y en adopción */}
-        {/* {lostPins}
-        {adoptedPins} */}
-
-        {/* Panel de filtros */}
-        <ControlPanel /* onFilterChange={handleFilterChange} */ />
+        {/* Marcador de playas */}
+        {beachesPin}
       </Map>
     </Box>
   );

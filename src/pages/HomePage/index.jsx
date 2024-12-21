@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import { Button, Container, Overlay, Text, Title } from '@mantine/core';
+import { Link } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
 import classes from './home.module.css';
 
@@ -21,10 +22,11 @@ function HomePage() {
             Verifica el estado de la playa, la presencia de salvavidas, las
             restricciones, el estado de la marea y mucho más antes de tu visita.
           </Text>
-
-          <Button size="xl" className={classes.control}>
-            Explora las playas
-          </Button>
+          <Link to="/playas">
+            <Button size="xl" className={classes.control}>
+              Explora las playas
+            </Button>
+          </Link>
         </Container>
       </div>
     </AppLayout>
