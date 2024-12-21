@@ -33,7 +33,7 @@ function DistrictCard({ data }) {
           <Group gap={4}>
             <IconBeach size={18} stroke={1.5} color={theme.colors.dark[2]} />
             <Text size="md" className={classes.bodyText}>
-              {data.beaches.length} Playas
+              {data.beaches?.length} Playas
             </Text>
           </Group>
         </div>

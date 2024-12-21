@@ -2,31 +2,29 @@
 import {
   Alert,
   Box,
-  Button,
   Center,
   Container,
   Group,
   Loader,
   LoadingOverlay,
   Overlay,
-  Select,
   Stack,
-  Text,
   Title,
 } from '@mantine/core';
-import { IconFilter, IconMapPin, IconX } from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { notifications } from '@mantine/notifications';
 import AppLayout from '../../components/AppLayout';
 import classes from './district.module.css';
 import DistrictCard from '../../components/DistrictCard';
-import provincesData from '../../data/provinces';
-import departmentData from '../../data/department';
 import { getMunicipalities } from '../../services/municipality';
+import Filter from './Filter';
 
 function DistrictsPage() {
   const [municipalitiesData, setMunicipalitiesData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingFilter, setLoadingFilter] = useState(false);
+  const [loadingClearFilter, setLoadingClearFilter] = useState(false);
 
   const getMunicipalitiesData = async () => {
     setLoading(true);
@@ -70,30 +68,13 @@ function DistrictsPage() {
               Conoce los balnearios del Perú
             </Title>
 
-            <Group mt="xl" align="flex-end">
-              <Stack gap={4}>
-                <Text c="white">Departamento</Text>
-                <Select
-                  searchable
-                  placeholder="Departamento"
-                  data={departmentData}
-                  rightSectionPointerEvents="none"
-                  rightSection={<IconMapPin size={18} stroke={1.5} />}
-                />
-              </Stack>
-              <Stack gap={4}>
-                <Text c="white">Provincia</Text>
-                <Select
-                  searchable
-                  placeholder="Provincia"
-                  data={provincesData}
-                  rightSectionPointerEvents="none"
-                  rightSection={<IconMapPin size={18} stroke={1.5} />}
-                />
-              </Stack>
-
-              <Button rightSection={<IconFilter size={14} />}>Filtrar</Button>
-            </Group>
+            <Filter
+              setMunicipalitiesData={setMunicipalitiesData}
+              loadingFilter={loadingFilter}
+              setLoadingFilter={setLoadingFilter}
+              loadingClearFilter={loadingClearFilter}
+              setLoadingClearFilter={setLoadingClearFilter}
+            />
           </Container>
         </div>
         <Container size="lg" pt={48} pb={100}>
@@ -105,7 +86,7 @@ function DistrictsPage() {
             ) : municipalitiesData.length ? (
               <Box pos="relative">
                 <LoadingOverlay
-                  /* visible={loadingClearFilterPets || loadingFilterPets} */
+                  visible={loadingClearFilter || loadingFilter}
                   zIndex={1000}
                   overlayProps={{ radius: 'sm', blur: 0.5 }}
                 />
@@ -113,9 +94,7 @@ function DistrictsPage() {
               </Box>
             ) : (
               <Center w="100%">
-                <Alert variant="light" color="grape">
-                  No existen balnearios
-                </Alert>
+                <Alert variant="light">No existen balnearios</Alert>
               </Center>
             )}
           </Stack>
