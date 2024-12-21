@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import {
@@ -9,14 +10,17 @@ import {
   TextInput,
 } from '@mantine/core';
 import { IconPhotoScan } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MapCard from '../../MapCard';
 
-function BasicForm({ form }) {
-  const [location, setLocation] = useState(null);
-  const [locationError, setLocationError] = useState(false);
-
+function BasicForm({
+  form,
+  location = null,
+  setLocation,
+  locationError,
+  setLocationError,
+}) {
   useEffect(() => {
     form.setFieldValue('location', location);
   }, [location]);
@@ -91,6 +95,16 @@ BasicForm.propTypes = {
     key: PropTypes.func.isRequired,
     errors: PropTypes.shape().isRequired,
   }).isRequired,
+  setLocation: PropTypes.func.isRequired,
+  locationError: PropTypes.bool.isRequired,
+  setLocationError: PropTypes.func.isRequired,
+  location: PropTypes.oneOfType([
+    PropTypes.shape({
+      latitude: PropTypes.number,
+      longitude: PropTypes.number,
+    }),
+    PropTypes.oneOf([null]),
+  ]),
 };
 
 export default BasicForm;
