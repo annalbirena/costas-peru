@@ -15,6 +15,8 @@ function BeachForm() {
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(false);
   const { municipality, token } = useMunicipalityContext();
+  const [location, setLocation] = useState(null);
+  const [locationError, setLocationError] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -73,7 +75,6 @@ function BeachForm() {
   const nextStep = () =>
     setActive((current) => {
       if (form.validate().hasErrors) {
-        /* console.log(form.errors); */
         return current;
       }
       return current < 3 ? current + 1 : current;
@@ -81,6 +82,14 @@ function BeachForm() {
 
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const resetForm = () => {
+    // Reset values
+    form.reset();
+    setActive(0);
+    setLocation(null);
+    setLocationError(false);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -115,6 +124,7 @@ function BeachForm() {
           color: 'cyan',
           icon: <IconCheck size={20} />,
         });
+        resetForm();
       } else {
         notifications.show({
           title: 'Error!',
@@ -138,7 +148,13 @@ function BeachForm() {
     <>
       <Stepper active={active}>
         <Stepper.Step label="Información basica">
-          <BasicForm form={form} />
+          <BasicForm
+            form={form}
+            location={location}
+            setLocation={setLocation}
+            locationError={locationError}
+            setLocationError={setLocationError}
+          />
         </Stepper.Step>
         <Stepper.Step label="Servicios">
           <ServicesForm form={form} />
