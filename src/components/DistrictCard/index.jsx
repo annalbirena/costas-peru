@@ -1,9 +1,10 @@
 import { IconBeach } from '@tabler/icons-react';
 import { Card, Group, Text, Title, useMantineTheme } from '@mantine/core';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classes from './districtcard.module.css';
 
-function DistrictCard() {
+function DistrictCard({ data }) {
   const theme = useMantineTheme();
 
   return (
@@ -13,13 +14,12 @@ function DistrictCard() {
       className={classes.card}
       radius="md"
       component={Link}
-      to="/balnearios/1"
+      to={`/balnearios/${data.id}`}
     >
       <div
         className={classes.image}
         style={{
-          backgroundImage:
-            'url(https://portal.andina.pe/EDPfotografia/Thumbnail/2013/02/07/000202844W.jpg)',
+          backgroundImage: `url(${data.image})`,
         }}
       />
       <div className={classes.overlay} />
@@ -27,13 +27,13 @@ function DistrictCard() {
       <div className={classes.content}>
         <div>
           <Title order={3} size={28} className={classes.title} fw={600}>
-            Punta Hermosa
+            {data.name}
           </Title>
 
           <Group gap={4}>
             <IconBeach size={18} stroke={1.5} color={theme.colors.dark[2]} />
             <Text size="md" className={classes.bodyText}>
-              5 Playas
+              {data.beaches.length} Playas
             </Text>
           </Group>
         </div>
@@ -41,5 +41,18 @@ function DistrictCard() {
     </Card>
   );
 }
+
+DistrictCard.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    beaches: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    ),
+  }).isRequired,
+};
 
 export default DistrictCard;

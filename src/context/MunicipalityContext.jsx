@@ -17,7 +17,7 @@ export function MunicipalityProvider({ children }) {
 
   useEffect(() => {
     // Guardar token y municipalityId
-    const id = localStorage.getItem('municipalityId');
+    const id = localStorage.getItem('userId');
     const tokenId = localStorage.getItem('token');
     setMunicipalityId(id);
     setToken(tokenId);

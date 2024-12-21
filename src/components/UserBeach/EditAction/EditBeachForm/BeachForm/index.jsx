@@ -95,22 +95,7 @@ function BeachForm({ data, setBeachesData, close }) {
   const handleSubmit = async () => {
     setLoading(true);
     const values = form.getValues();
-    console.log({
-      name: values.name,
-      description: values.description,
-      latitude: values.location.latitude,
-      longitude: values.location.longitude,
-      isHealthy: values.isHealthy === 'si',
-      tideStatus: values.tideStatus,
-      hasLifeguards: values.hasLifeguards === 'si',
-      lifeguardSchedule: values.lifeguardSchedule,
-      hasRestrooms: values.hasBathrooms === 'si',
-      restroomSchedule: values.bathroomSchedule,
-      hasShowers: values.hasShowers === 'si',
-      showerSchedule: values.showerSchedule,
-      restrictions: filterFields(getNonEmptyRestrictions(values.restrictions)),
-      file: imageFile || values.image,
-    });
+
     try {
       const beachUpdated = await updateBeach(
         data.id,
