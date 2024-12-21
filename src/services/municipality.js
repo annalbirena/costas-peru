@@ -59,3 +59,16 @@ export const getMunicipalities = async () => {
     return null;
   }
 };
+
+// Función para obtener municipalidades por filtros
+export const getMunicipalitiesByFilters = async (filters) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/municipalities/filters/filter?${filters}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching municipalities by filters:', error);
+    return null;
+  }
+};
