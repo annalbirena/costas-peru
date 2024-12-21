@@ -88,7 +88,7 @@ function BeachForm() {
     const values = form.getValues();
 
     try {
-      const muniCreated = await createBeach(
+      const beachCreated = await createBeach(
         municipality.id,
         {
           name: values.name,
@@ -109,7 +109,7 @@ function BeachForm() {
         token,
       );
 
-      if (muniCreated) {
+      if (beachCreated) {
         notifications.show({
           title: 'Éxito!',
           message: 'Playa creada correctamente.',

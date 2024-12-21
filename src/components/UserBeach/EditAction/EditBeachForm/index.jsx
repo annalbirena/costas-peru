@@ -2,10 +2,9 @@ import { Modal, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
 import BeachForm from './BeachForm';
 
-function EditBeachModal({ isOpen, close, onClose }) {
+function EditBeachModal({ data, setBeachesData, isOpen, close, onClose }) {
   const handleClose = () => {
     onClose(); // Close Modal
-    close();
   };
 
   return (
@@ -20,12 +19,38 @@ function EditBeachModal({ isOpen, close, onClose }) {
       size="xl"
       centered
     >
-      <BeachForm />
+      <BeachForm data={data} setBeachesData={setBeachesData} close={close} />
     </Modal>
   );
 }
 
 EditBeachModal.propTypes = {
+  data: PropTypes.shape({
+    description: PropTypes.string.isRequired,
+    hasLifeguards: PropTypes.bool.isRequired,
+    hasRestrooms: PropTypes.bool.isRequired,
+    hasShowers: PropTypes.bool.isRequired,
+    id: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    isHealthy: PropTypes.bool.isRequired,
+    latitude: PropTypes.number.isRequired,
+    lifeguardSchedule: PropTypes.string.isRequired,
+    longitude: PropTypes.number.isRequired,
+    municipalityId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    restrictions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+      }),
+    ),
+    restroomSchedule: PropTypes.string.isRequired,
+    showerSchedule: PropTypes.string.isRequired,
+    tideStatus: PropTypes.string.isRequired,
+  }).isRequired,
+  setBeachesData: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

@@ -20,6 +20,23 @@ export const createBeach = async (muniId, data, token) => {
   }
 };
 
+// Función para agregar una nueva playa
+export const updateBeach = async (beachId, data, token) => {
+  const URL = `${BASE_URL}/beaches/${beachId}`;
+  try {
+    const response = await axios.put(URL, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating beach:', error);
+    return null;
+  }
+};
+
 // Función para obtener playas por municipalidad
 export const getBeachesByMuni = async (id) => {
   const URL = `${BASE_URL}/beaches/municipality/${id}`;

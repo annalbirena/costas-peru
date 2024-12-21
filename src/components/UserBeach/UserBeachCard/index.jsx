@@ -2,22 +2,14 @@ import { Card, Group, Image, Text, ThemeIcon } from '@mantine/core';
 import { IconFlagFilled } from '@tabler/icons-react';
 import PropTypes from 'prop-types';
 import classes from './beach.module.css';
-import EditPetAction from '../EditAction/EditBeachAction';
+import EditBeachAction from '../EditAction/EditBeachAction';
 import EditTideAction from '../EditAction/EditTideAction';
 
-const mockdata = {
-  image:
-    'https://portal.andina.pe/EDPfotografia/Thumbnail/2013/02/07/000202844W.jpg',
-  title: 'Playa Blanca',
-};
-
 function UserBeachCard({ data, setBeachesData }) {
-  const { image, title } = mockdata;
-
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
-        <Image src={image} alt={title} height={180} />
+        <Image src={data.image} alt={data.name} height={180} />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
@@ -33,7 +25,7 @@ function UserBeachCard({ data, setBeachesData }) {
           </ThemeIcon>
         </Group>
       </Card.Section>
-      <EditPetAction data={data} setBeachesData={setBeachesData} />
+      <EditBeachAction data={data} setBeachesData={setBeachesData} />
       <EditTideAction data={data} setBeachesData={setBeachesData} />
     </Card>
   );

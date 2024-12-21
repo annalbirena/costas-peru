@@ -88,7 +88,7 @@ function ServicesForm({ form }) {
 
         <TextInput
           flex={1}
-          label="Horario de Baños"
+          label="Horario de Duchas"
           placeholder="De 9am a 5pm"
           key={form.key('showerSchedule')}
           {...form.getInputProps('showerSchedule')}
