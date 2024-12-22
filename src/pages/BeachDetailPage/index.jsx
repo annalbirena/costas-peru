@@ -219,9 +219,6 @@ function BeachDetailPage() {
               {restrictions}
             </SimpleGrid>
           ) : null}
-          {/* <SimpleGrid cols={{ base: 1, xs: 3 }} spacing={50} mt={48}>
-            {restrictions}
-          </SimpleGrid> */}
         </Container>
       </Box>
     </AppLayout>

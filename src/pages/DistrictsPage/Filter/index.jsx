@@ -60,7 +60,7 @@ function Filter({
     setDepartment('');
     setProvince('');
 
-    // Mostrar todas las mascotas al borrar los filtros
+    // Mostrar todas las municipalidades al borrar los filtros
     const fetchAllMunis = async () => {
       setLoadingClearFilter(true);
       try {
@@ -70,7 +70,8 @@ function Filter({
         console.log(error);
         notifications.show({
           title: 'Error!',
-          message: 'No se pudo obtener las mascotas, intenta nuevamente.',
+          message:
+            'No se pudo obtener las municipalidades, intenta nuevamente.',
           icon: <IconX size={20} />,
         });
       } finally {
