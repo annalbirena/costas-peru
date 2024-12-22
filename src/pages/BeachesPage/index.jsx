@@ -2,35 +2,29 @@
 import {
   Alert,
   Box,
-  Button,
   Center,
   Container,
   Group,
   Loader,
   LoadingOverlay,
   Overlay,
-  Select,
   Stack,
-  Text,
   Title,
 } from '@mantine/core';
-import {
-  IconDropletHeart,
-  IconFilter,
-  IconLifebuoy,
-  IconSwimming,
-  IconX,
-} from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import AppLayout from '../../components/AppLayout';
 import classes from './beaches.module.css';
 import BeachCard from '../../components/BeachCard';
 import { getBeaches } from '../../services/beach';
+import Filter from './Filter';
 
 function BeachesPage() {
   const [beachesData, setBeachesData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingFilter, setLoadingFilter] = useState(false);
+  const [loadingClearFilter, setLoadingClearFilter] = useState(false);
 
   const getBeachesData = async () => {
     setLoading(true);
@@ -69,37 +63,13 @@ function BeachesPage() {
           />
           <Container className={classes.container} size="md">
             <Title className={classes.title}>Conoce las Playas del Perú</Title>
-            <Group mt="xl" align="flex-end">
-              <Stack gap={4}>
-                <Text c="white">¿Es saludable?</Text>
-                <Select
-                  placeholder="Elige una opción"
-                  data={['React', 'Angular', 'Vue', 'Svelte']}
-                  rightSectionPointerEvents="none"
-                  rightSection={<IconDropletHeart size={18} stroke={1.5} />}
-                />
-              </Stack>
-              <Stack gap={4}>
-                <Text c="white">¿Tiene salvavidas?</Text>
-                <Select
-                  placeholder="Elige una opción"
-                  data={['React', 'Angular', 'Vue', 'Svelte']}
-                  rightSectionPointerEvents="none"
-                  rightSection={<IconLifebuoy size={18} stroke={1.5} />}
-                />
-              </Stack>
-              <Stack gap={4}>
-                <Text c="white">Nivel de marea</Text>
-                <Select
-                  placeholder="Elige una opción"
-                  data={['React', 'Angular', 'Vue', 'Svelte']}
-                  rightSectionPointerEvents="none"
-                  rightSection={<IconSwimming size={18} stroke={1.5} />}
-                />
-              </Stack>
-
-              <Button rightSection={<IconFilter size={14} />}>Filtrar</Button>
-            </Group>
+            <Filter
+              setBeachesData={setBeachesData}
+              loadingFilter={loadingFilter}
+              setLoadingFilter={setLoadingFilter}
+              loadingClearFilter={loadingClearFilter}
+              setLoadingClearFilter={setLoadingClearFilter}
+            />
           </Container>
         </div>
         <Container size="lg" pt={48} pb={100}>
@@ -111,6 +81,7 @@ function BeachesPage() {
             ) : beachesData.length ? (
               <Box pos="relative">
                 <LoadingOverlay
+                  visible={loadingClearFilter || loadingFilter}
                   zIndex={1000}
                   overlayProps={{ radius: 'sm', blur: 0.5 }}
                 />
@@ -118,9 +89,7 @@ function BeachesPage() {
               </Box>
             ) : (
               <Center w="100%">
-                <Alert variant="light" color="grape">
-                  No existen playas
-                </Alert>
+                <Alert variant="light">No existen playas</Alert>
               </Center>
             )}
           </Stack>

@@ -89,3 +89,16 @@ export const updateTideStatus = async (beachId, tideStatus, token) => {
     return null;
   }
 };
+
+// Función para obtener playas por filtros
+export const getBeachesByFilters = async (filters) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/beaches/filters/filter?${filters}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching beaches by filters:', error);
+    return null;
+  }
+};
